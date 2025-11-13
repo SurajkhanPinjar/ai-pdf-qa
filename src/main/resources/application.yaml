@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ai-pdf-qa
+
+  profiles:
+    active: docker     # default for local development
+    group:
+      dev: dev
+      docker: docker
+
+# Common settings shared across profiles
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always

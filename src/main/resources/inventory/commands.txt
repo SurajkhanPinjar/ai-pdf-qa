@@ -1,0 +1,17 @@
+==========DOCKER=========
+→ docker compose build
+→ docker compose up --build
+
+-> docker-compose up -d --build   // to run build
+
+-> docker-compose down
+
+-> docker-compose logs -f          // to check logs
+
+-> docker ps
+
+-> docker exec -it ollama ollama pull mistral
+-> docker exec -it ollama ollama pull nomic-embed-text
+-> docker exec -it ollama ollama list
+
+-> docker-compose restart ai-pdf-qa
