@@ -15,3 +15,30 @@
 -> docker exec -it ollama ollama list
 
 -> docker-compose restart ai-pdf-qa
+
+
+
+
+==================Weavite Insert================
+##run on both local and Docker:
+curl -X POST "http://localhost:8080/v1/schema" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "class": "PdfChunk",
+    "vectorizer": "none",
+    "properties": [
+      {
+        "name": "text",
+        "dataType": ["text"]
+      },
+      {
+        "name": "meta",
+        "dataType": ["text"]
+      }
+    ]
+  }'
+
+validating:
+curl http://localhost:8080/v1/schema
+
+==================Weavite Insert================

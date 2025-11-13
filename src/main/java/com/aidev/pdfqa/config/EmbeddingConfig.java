@@ -1,24 +1,24 @@
 package com.aidev.pdfqa.config;
 
-import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OllamaConfig {
+public class EmbeddingConfig {
 
-    @Value("${spring.ai.ollama.chat.options.model:mistral}")
-    private String chatModel;
+    @Value("${spring.ai.ollama.embedding.options.model:nomic-embed-text}")
+    private String embeddingModel;
 
     @Value("${spring.ai.ollama.base-url:http://localhost:11434}")
     private String baseUrl;
 
     @Bean
-    public OllamaChatModel ollamaChatModel() {
-        return OllamaChatModel.builder()
+    public OllamaEmbeddingModel embeddingModel() {
+        return OllamaEmbeddingModel.builder()
                 .baseUrl(baseUrl)
-                .modelName(chatModel)
+                .modelName(embeddingModel)
                 .build();
     }
 }
