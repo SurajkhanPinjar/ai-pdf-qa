@@ -9,7 +9,7 @@ spring:
   # Kafka Configuration
   # -------------------------------
   kafka:
-    bootstrap-servers: kafka:9094
+    bootstrap-servers: kafka:9092
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
