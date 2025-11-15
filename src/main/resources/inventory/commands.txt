@@ -17,6 +17,10 @@
 -> docker-compose restart ai-pdf-qa
 
 
+???? Run docker container app for local run
+docker-compose up -d kafka zookeeper postgres weaviate ollama
+
+
 
 
 ==================Weavite Insert================
@@ -42,3 +46,32 @@ validating:
 curl http://localhost:8080/v1/schema
 
 ==================Weavite Insert================
+
+
+==================Uploading File================
+curl -X POST http://localhost:9090/api/pdf/upload \
+  -F "/Users/surajkhanpinjar/Local Drive/Docs/Quick_Ans_Docker.pdf"
+
+  /Users/surajkhanpinjar/Local Drive/Docs/Quick_Ans_Docker.pdf
+
+==================Kafka========================starts=========
+-> brew install kafka
+-> brew install zookeeper
+
+-> brew services start zookeeper   // if already running in docker we should down docker
+->  brew services start kafka
+
+-> nc -zv localhost 9092  /// to check connection
+
+  ==> create topic:
+  ->  kafka-topics --bootstrap-server localhost:9092 --create \
+      --topic demo-text-topic \
+      --partitions 1 \
+      --replication-factor 1
+
+==================Kafka========================ends=========
+
+====Other Ports=====
+-> lsof -i :9093   // to check any ports are there in the system
+
+

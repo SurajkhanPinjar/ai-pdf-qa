@@ -3,7 +3,7 @@ spring:
     name: ai-pdf-qa
 
   profiles:
-    active: docker     # default for local development
+    active: dev     # default for local development
     group:
       dev: dev
       docker: docker

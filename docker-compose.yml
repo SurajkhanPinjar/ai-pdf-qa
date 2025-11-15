@@ -13,7 +13,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - "2181:2181"
+      - "2182:2181"
 
   # ------------------------------------------------------
   # 🚀 Kafka Broker
@@ -25,7 +25,7 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
+      - "9094:9092"
     environment:
       KAFKA_BROKER_ID: 1
 
@@ -73,7 +73,7 @@ services:
       DEFAULT_VECTORIZER_MODULE: "none"
       CLUSTER_HOSTNAME: "node1"
     ports:
-      - "8080:8080"
+      - "8082:8080"
 
   # ------------------------------------------------------
   # 🚀 Ollama (LLM Runtime: mistral, nomic-embed-text)
@@ -102,6 +102,7 @@ services:
       - ollama
     ports:
       - "9090:8080"
+      - "5005:5005"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092

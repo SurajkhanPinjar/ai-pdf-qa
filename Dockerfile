@@ -26,6 +26,9 @@ FROM eclipse-temurin:17-jre AS runner
 
 WORKDIR /app
 
+# 🔥🔥 Enable Java Remote Debugging on port 5005
+ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
