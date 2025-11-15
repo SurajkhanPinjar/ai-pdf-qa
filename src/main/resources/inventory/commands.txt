@@ -43,7 +43,7 @@ curl -X POST "http://localhost:8082/v1/schema" \
   }'
 
 validating:
-curl http://localhost:8080/v1/schema
+curl http://localhost:8082/v1/schema
 
 ==================Weavite Insert================
 

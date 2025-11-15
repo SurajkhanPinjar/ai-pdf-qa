@@ -13,11 +13,13 @@ server:
   port: 8081
 
 management:
+  endpoint:
+    env:
+      show-values: ALWAYS
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,env
 
-  endpoint:
-    health:
-      show-details: always

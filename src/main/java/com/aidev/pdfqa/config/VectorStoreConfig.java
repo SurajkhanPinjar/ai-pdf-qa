@@ -9,16 +9,13 @@ import org.springframework.context.annotation.Configuration;
 public class VectorStoreConfig {
 
     @Bean
-    public WeaviateEmbeddingStore weaviateStore(
-            @Value("${spring.ai.vectorstore.weaviate.scheme:http}") String scheme,
-            @Value("${spring.ai.vectorstore.weaviate.host:weaviate}") String host,
-            @Value("${spring.ai.vectorstore.weaviate.port:8080}") int port
-    ) {
+    public WeaviateEmbeddingStore weaviateStore(WeaviateProperties props) {
+
         return WeaviateEmbeddingStore.builder()
-                .scheme(scheme)
-                .host(host)
-                .port(port)
-                .objectClass("PdfChunk")
+                .scheme(props.getScheme())     // http
+                .host(props.getHost())         // localhost
+                .port(props.getPort())         // 8082
+                .objectClass(props.getObjectClass()) // PdfChunk
                 .build();
     }
 }

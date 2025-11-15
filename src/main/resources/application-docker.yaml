@@ -56,7 +56,7 @@ spring:
     weaviate:
       scheme: http
       host: weaviate
-      port: 8082
+      port: 8080
       object-class: PdfChunk
 
 # -------------------------------
