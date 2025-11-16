@@ -2,7 +2,16 @@ server:
   port: 8081
 
 spring:
-  # -------------------------------
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: mistral
+      embedding:
+        options:
+          model: nomic-embed-text
+
   # Weaviate (LOCAL)
   # -------------------------------
   vectorstore:
@@ -44,18 +53,18 @@ spring:
     password: password
     driver-class-name: org.postgresql.Driver
 
-  # -------------------------------
-  # Ollama (LOCAL)
-  # -------------------------------
-  ai:
-    ollama:
-      base-url: http://localhost:11434
-      chat:
-        options:
-          model: mistral
-      embedding:
-        options:
-          model: nomic-embed-text
+#  # -------------------------------
+#  # Ollama (LOCAL)
+#  # -------------------------------
+#  ai:
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        options:
+#          model: mistral
+#      embedding:
+#        options:
+#          model: nomic-embed-text
 
 
 

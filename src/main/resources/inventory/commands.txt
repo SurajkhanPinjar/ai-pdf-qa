@@ -74,4 +74,29 @@ curl -X POST http://localhost:9090/api/pdf/upload \
 ====Other Ports=====
 -> lsof -i :9093   // to check any ports are there in the system
 
+-> rm -rf ~/.gradle/caches  //removing the cache
+
+-> ls /tmp/pdfs  //checking the tmp
+
+-> ./gradlew clean build --refresh-dependencies
+
+->  rm -rf ~/.gradle/caches
+
+
+----------SPCL----------------
+rm -rf ~/.gradle/caches
+rm -rf ~/.gradle/wrapper
+rm -rf /Users/surajkhanpinjar/Java_Project/ai-pdf-qa/.gradle
+./gradlew --stop
+pkill -f gradle
+
+->  tree src/main/resources -L 2
+
+
+
+
+-----------HOSTS to ask-----------
+GET http://localhost:8081/api/debug/rag?q=What is Docker?
+
+
 

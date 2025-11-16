@@ -18,33 +18,66 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//
+//	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	implementation 'org.springframework.boot:spring-boot-starter-validation'
+//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//
+//	// Dev tools (optional)
+//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//
+//	// OpenAPI / Swagger UI
+//	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+//
+//	// LangChain4j for RAG
+//	implementation 'dev.langchain4j:langchain4j-core:0.33.0'
+//	implementation 'dev.langchain4j:langchain4j:0.33.0'
+//	implementation 'dev.langchain4j:langchain4j-ollama:0.33.0'
+//	implementation 'dev.langchain4j:langchain4j-weaviate:0.33.0'
+//	implementation 'dev.langchain4j:langchain4j-easy-rag:1.4.0-beta10'
+//	implementation "dev.langchain4j:langchain4j-document-parser-apache-tika:1.4.0-beta10"
+//
+//	implementation 'org.apache.pdfbox:pdfbox:2.0.30'
+//	implementation 'org.apache.pdfbox:fontbox:2.0.30'
+//	implementation 'org.apache.pdfbox:xmpbox:2.0.30'
+//
+//	// Kafka
+//	implementation 'org.springframework.kafka:spring-kafka'
+//	implementation 'com.fasterxml.jackson.core:jackson-databind'
+//
+//	// Lombok
+//	compileOnly 'org.projectlombok:lombok'
+//	annotationProcessor 'org.projectlombok:lombok'
+//}
 
+dependencies {
+	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	// Dev tools (optional)
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	// OpenAPI / Swagger UI
+	//	// OpenAPI / Swagger UI
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
-
-	// LangChain4j for RAG
-	implementation 'dev.langchain4j:langchain4j-core:0.33.0'
-	implementation 'dev.langchain4j:langchain4j:0.33.0'
-	implementation 'dev.langchain4j:langchain4j-ollama:0.33.0'
-	implementation 'dev.langchain4j:langchain4j-weaviate:0.33.0'
-	implementation 'dev.langchain4j:langchain4j-easy-rag:1.4.0-beta10'
 
 	// Kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
+	// LangChain4j 0.33.0
+	implementation 'dev.langchain4j:langchain4j-core:0.33.0'
+	implementation 'dev.langchain4j:langchain4j:0.33.0'
+	implementation 'dev.langchain4j:langchain4j-ollama:0.33.0'
+	implementation 'dev.langchain4j:langchain4j-weaviate:0.33.0'
+
+	// PDFBox (compatible with LC4J 0.33)
 	implementation 'org.apache.pdfbox:pdfbox:2.0.30'
+	implementation 'org.apache.pdfbox:fontbox:2.0.30'
+	implementation 'org.apache.pdfbox:pdfbox-tools:2.0.30'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'

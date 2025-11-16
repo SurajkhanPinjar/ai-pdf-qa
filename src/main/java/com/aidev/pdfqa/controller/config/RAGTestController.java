@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class RAGTestController {
 
@@ -27,9 +29,9 @@ public class RAGTestController {
 
         // Build Metadata (cannot be null for your version)
         Metadata metadata = Metadata.from(
-                userMessage,  // original user message
-                null,         // no chat memory id
-                null          // no past history
+                userMessage,
+                "",          // chat memory id (empty string allowed)
+                List.of()    // empty history
         );
 
         // Build AugmentationRequest

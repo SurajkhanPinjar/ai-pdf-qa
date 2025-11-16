@@ -3,12 +3,11 @@ spring:
     name: ai-pdf-qa
 
   profiles:
-    active: docker     # default for local development
+    active: dev
     group:
       dev: dev
       docker: docker
 
-# Common settings shared across profiles
 server:
   port: 8081
 
@@ -18,8 +17,12 @@ management:
       show-values: ALWAYS
     health:
       show-details: always
+
   endpoints:
     web:
       exposure:
-        include: health,info,env
+        include: "*"
 
+  logging:
+    level:
+      org.springframework.kafka: DEBUG
