@@ -3,7 +3,7 @@ spring:
     name: ai-pdf-qa
 
   profiles:
-    active: dev
+    active: docker
     group:
       dev: dev
       docker: docker

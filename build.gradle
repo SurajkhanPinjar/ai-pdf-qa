@@ -73,6 +73,7 @@ dependencies {
 	implementation 'dev.langchain4j:langchain4j:0.33.0'
 	implementation 'dev.langchain4j:langchain4j-ollama:0.33.0'
 	implementation 'dev.langchain4j:langchain4j-weaviate:0.33.0'
+	implementation 'dev.langchain4j:langchain4j-easy-rag:1.4.0-beta10'
 
 	// PDFBox (compatible with LC4J 0.33)
 	implementation 'org.apache.pdfbox:pdfbox:2.0.30'

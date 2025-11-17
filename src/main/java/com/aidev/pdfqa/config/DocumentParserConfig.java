@@ -8,11 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DocumentParserConfig {
 
-//    @Bean
-//    public ApacheTikaDocumentParser apacheTikaDocumentParser() {
-//        return new ApacheTikaDocumentParser(true); // true = include metadata
-//    }
-
     @Bean
     public DocumentSplitter documentSplitter() {
         // recursive chunking → best for RAG

@@ -1,45 +1,69 @@
--
-📘 AI PDF Q&A Assistant (Event-Driven, Kafka + RAG + Ollama)
 
-A scalable, asynchronous, event-driven system to upload PDFs, index them using embeddings, and query them using LLM-powered RAG.
+
+📘 AI PDF Q&A Assistant (Event-Driven, Kafka + AIServices RAG + Ollama + Weaviate)
+
+A fully event-driven, asynchronous RAG pipeline using Java 17, Spring Boot 3.2, Kafka, Weaviate, and Ollama for LLM-powered PDF Question-Answering.
+
+Built with clean architecture, loose coupling, AIServices, and production-quality patterns.
 
 ⸻
 
 🚀 Overview
 
-AI PDF Q&A Assistant is a Java 17 + Spring Boot 3.2 application that lets users:
-•	Upload any PDF
-•	Extract text & chunk it
-•	Generate embeddings using LangChain4j + Ollama
-•	Store vectors in Weaviate or pgvector
-•	Retrieve relevant chunks using RAG
-•	Ask natural language questions about the PDF
-•	Get AI-generated answers from Mistral (via Ollama)
-•	All ingestion happens asynchronously via Kafka
+AI PDF Q&A Assistant allows users to:
 
-This architecture is highly scalable, resilient, and production-ready.
+📤 Upload any PDF
+
+– Extract text
+– Chunk it safely
+– Remove emoji/noise
+– Generate embeddings via Ollama → nomic-embed-text
+
+📦 Store Vectors
+
+– Weaviate (preferred)
+or
+– PostgreSQL + pgvector
+
+🤖 Query Using RAG
+
+– Retrieve relevant chunks
+– AIServices builds the final prompt
+– Mistral (Ollama) answers using ONLY retrieved PDF context
+– No hallucinations
+
+⚙️ Entire ingestion is event-driven
+
+PDF processing happens asynchronously through Kafka.
+
+✔ Non-blocking
+✔ Fault-tolerant
+✔ Horizontally scalable
+✔ Decoupled ingestion pipeline
+✔ Ready for production
 
 ⸻
 
 🧠 Why Kafka?
 
-PDF ingestion (extract → chunk → embed → vector store) is heavy, so Instead of doing it in the upload API, we push it to Kafka:
+PDF extraction → chunking → embedding is slow.
 
-User Uploads PDF
-↓
-Kafka Producer: pdf.ingest event
-↓
-Kafka Consumer (background worker)
-↓
-Extract → Chunk → Embed → Vector Store
+Instead of blocking the upload API:
 
-This gives:
+Client Uploads PDF
+↓
+REST API produces Kafka event → pdf.ingest
+↓
+Kafka Consumer Worker
+↓
+Extract → Chunk → Embed → Store vectors
 
-✔ Non-blocking uploads
-✔ Retry & fault tolerance
-✔ Horizontal scaling of ingestion workers
-✔ Separation of concerns
-✔ Event-driven pipelines
+Benefits:
+•	✔ Upload API returns instantly
+•	✔ No timeout issues
+•	✔ Retry on failures
+•	✔ Parallel ingestion workers
+•	✔ Event-driven microservice style
 
 ⸻
 
@@ -48,137 +72,167 @@ This gives:
 Backend
 •	Java 17
 •	Spring Boot 3.2.x
-•	Gradle
 •	Spring Kafka
-•	LangChain4j
+•	Spring Web
+•	LangChain4j (0.33.0)
+•	AIServices API
 •	Apache PDFBox
 
-AI + RAG
-•	Ollama (LLM inference)
-•	Mistral (chat model)
+AI & RAG
+•	Ollama
+•	mistral (chat model)
 •	nomic-embed-text (embedding model)
-•	Chunking + Retrieval pipeline
+•	RAG using:
+•	WeaviateContentRetriever
+•	DefaultRetrievalAugmentor
+•	AIServices prompt templates
 
-Vector Database
-•	Weaviate or
-•	Postgres + pgvector
+Vector Databases
+•	Weaviate (default, best)
+•	PostgreSQL + pgvector (optional)
 
-Infrastructure
-•	Docker
-•	Docker Compose
+Infra
 •	Kafka + Zookeeper
+•	Weaviate
+•	Docker Compose
+•	Ollama (local LLM server)
 
 ⸻
 
-📁 Project Folder Structure
+📁 Updated Project Structure
 
 ai-pdf-qa/
-├── src/main/java/com/aidev/pdfqa/
-│   ├── controller/
-│   │   ├── PdfUploadController.java
-│   │   ├── QueryController.java
-│   │   └── HealthController.java
-│   │
-│   ├── kafka/
-│   │   ├── producer/
-│   │   │   └── PdfIngestProducer.java
-│   │   ├── consumer/
-│   │   │   └── PdfIngestConsumer.java
-│   │   ├── config/
-│   │   │   └── KafkaConfig.java
-│   │   └── model/
-│   │       └── PdfIngestEvent.java
-│   │
-│   ├── rag/
-│   │   ├── PdfTextExtractor.java
-│   │   ├── ChunkService.java
-│   │   ├── EmbeddingService.java
-│   │   ├── PdfIngestionService.java
-│   │   └── RAGQueryService.java
-│   │
-│   ├── vector/
-│   │   ├── VectorStoreRepository.java
-│   │   ├── PgVectorStore.java
-│   │   └── WeaviateVectorStore.java
-│   │
-│   ├── config/
-│   │   ├── OllamaConfig.java
-│   │   ├── EmbeddingConfig.java
-│   │   ├── VectorStoreConfig.java
-│   │   ├── RAGConfig.java
-│   │   └── SwaggerConfig.java
-│   │
-│   ├── model/
-│   │   ├── PdfDocumentMeta.java
-│   │   ├── Chunk.java
-│   │   ├── QueryRequest.java
-│   │   └── QueryResponse.java
-│   │
-│   ├── util/
-│   │   └── FileUtils.java
-│   │
-│   └── PdfQaApplication.java
+├── controller/
+│   ├── PdfUploadController.java   <-- Upload endpoint
+│   ├── PdfQueryController.java    <-- AI Q&A endpoint (AIServices)
+│   └── HealthController.java
 │
-├── src/main/resources/
-│   ├── application.yml
-│   ├── sample-pdfs/
+├── kafka/
+│   ├── producer/
+│   │   └── PdfIngestProducer.java
+│   ├── consumer/
+│   │   └── PdfIngestConsumer.java
+│   ├── model/
+│   │   └── PdfUploadedEvent.java
+│   └── KafkaConfig.java
+│
+├── rag/
+│   ├── PdfTextExtractor.java
+│   ├── ChunkService.java
+│   ├── PdfIngestionService.java
+│   ├── RagConfig.java             <-- AIServices RAG setup
+│   └── PdfQaService.java          <-- AIServices interface
+│
+├── vector/
+│   ├── VectorStoreConfig.java
+│   ├── WeaviateVectorStore.java
+│   └── PgVectorStore.java
+│
+├── config/
+│   ├── OllamaConfig.java
+│   ├── EmbeddingConfig.java
+│   ├── SwaggerConfig.java
+│   └── AppProperties.java
+│
+├── model/
+│   ├── Chunk.java
+│   ├── PdfDocumentMeta.java
+│   ├── QueryRequest.java
+│   └── QueryResponse.java
+│
+├── resources/
+│   ├── application.yaml
+│   ├── application-dev.yaml
+│   ├── application-docker.yaml
 │   └── banner.txt
 │
-├── build.gradle.kts
-├── docker-compose.yml
-├── README.md
-└── .gitignore
+└── PdfQaApplication.java
 
 
 ⸻
 
-🔄 Event-Driven Flow (Kafka)
+🔄 Event-Driven RAG Pipeline
 
-🔹 1. PDF Upload (REST)
+1️⃣ Upload PDF
 
 POST /api/pdf/upload
+•	Saves file temporarily
+•	Publishes PdfUploadedEvent to Kafka
 
-	•	Saves PDF temporarily
-	•	Publishes a pdf.ingest event to Kafka
+2️⃣ Kafka Worker
 
-🔹 2. Kafka Consumer runs Ingestion
-•	Extracts text
-•	Splits into chunks
-•	Generates embeddings
-•	Stores vectors
-•	Deletes temp file
+Consumes event → performs:
 
-🔹 3. User asks a Question (REST)
+✔ PDF text extraction
+✔ Cleanup (remove emojis)
+✔ Chunking (safe chunk sizes)
+✔ Embedding using Ollama (nomic-embed-text)
+✔ Insert vectors into Weaviate
+✔ Attach metadata:
 
-GET /api/pdf/ask?q=...
+source: <filename>
+type: pdf
+path: /tmp/...
 
-	•	Embeds question
-	•	Retrieves top chunks
-	•	Builds RAG prompt
-	•	Calls Ollama → returns answer
+3️⃣ Ask Questions
+
+GET /api/pdf/ask?q=
+
+Using AIServices:
+•	Embeds question
+•	Retrieves top chunks
+•	Builds combined prompt
+•	Calls Mistral
+•	Returns contextual answer
 
 ⸻
 
-🔥 Endpoints
+🤖 AIServices — Our RAG Brain
 
-Upload PDF
+public interface PdfQaService {
+
+    @SystemMessage("""
+        You are an expert PDF assistant.
+        Use ONLY the retrieved PDF chunks.
+        If answer not found: say "I could not find this in the document."
+    """)
+    @UserMessage("Question: {{question}}")
+    String answer(String question);
+}
+
+Wiring in RagConfig:
+
+@Bean
+public PdfQaService pdfQaService(OllamaChatModel chatModel,
+RetrievalAugmentor augmentor) {
+return AiServices.builder(PdfQaService.class)
+.chatLanguageModel(chatModel)
+.retrievalAugmentor(augmentor)
+.build();
+}
+
+
+⸻
+
+🔥 REST Endpoints
+
+📤 Upload PDF
 
 POST /api/pdf/upload
-Content-Type: multipart/form-data
-file: <your-pdf>
+file: <PDF>
 
 Response:
 
 "Upload received! PDF is being processed."
 
-Ask a Question
+🤖 Ask a question
 
-GET /api/pdf/ask?q=Summarize chapter 2
+GET /api/pdf/ask?q=Explain chapter 2
 
 Response:
 
 {
-"answer": "Chapter 2 mainly discusses...",
+"answer": "Chapter 2 describes...",
 "sources": [...]
 }
 
@@ -187,55 +241,58 @@ Response:
 
 🐳 Docker Setup
 
-Start the entire stack:
+Start everything:
 
 docker-compose up -d
 
-This launches:
-•	Kafka + Zookeeper
-•	Weaviate (or Postgres pgvector)
-•	Ollama (with API)
+Includes:
+•	Kafka
+•	Zookeeper
+•	Weaviate
+•	Ollama (API enabled)
 
-Then run app:
+Run backend:
 
 ./gradlew bootRun
 
-Swagger UI:
+Swagger:
 
-http://localhost:8080/swagger-ui.html
+http://localhost:8081/swagger-ui.html
 
 
 ⸻
 
-🧪 Testing the Flow
+🧪 Testing End-to-End
 
 1️⃣ Upload a PDF
 
-curl -F "file=@/path/to/file.pdf" http://localhost:8080/api/pdf/upload
+curl -F "file=@bank-policy.pdf" http://localhost:8081/api/pdf/upload
 
-2️⃣ Wait for ingestion (~1–3 sec depending on size)
+2️⃣ Wait for Kafka worker to index it
 
 3️⃣ Ask a question
 
-http://localhost:8080/api/pdf/ask?q=What is chapter 1 about?
+curl "http://localhost:8081/api/pdf/ask?q=What is the interest rate?"
 
 
 ⸻
 
 🔮 Roadmap
-•	Highlight exact PDF page of answer
-•	Async response streaming (SSE/WebSockets)
-•	Multiple PDFs per user
-•	Authorization & user sessions
-•	Summaries on upload
-•	Topic Extraction
-•	RAG with page references
+•	PDF page-level source mapping
+•	WebSockets streaming answers
+•	Multi-PDF collections
+•	User accounts + multi-tenancy
+•	Automatic PDF summarization
+•	Topic extraction
+•	Caching layer for faster queries
+•	Hybrid RAG (keyword + semantic search)
 
 ⸻
 
 🤝 Contributing
 
-PRs & suggestions welcome!
+PRs welcome!
+This repo is built for learning and production-ready experimentation.
 
 ⸻
 
@@ -244,4 +301,3 @@ PRs & suggestions welcome!
 MIT License
 
 ⸻
-
