@@ -41,15 +41,6 @@ public class PdfIngestionConsumer {
         // 2) Split into chunks
         String[] chunks = text.split("\\n\\n");
 
-        // 3) Embed + store each chunk
-//        for (String chunk : chunks) {
-//
-//            if (chunk.trim().isEmpty()) continue;
-//
-//            TextSegment segment = TextSegment.from(chunk);
-//            Embedding embedding = embeddingModel.embed(segment).content();
-//            weaviateStore.add(embedding, segment);  // stores with metadata
-//        }
         for (String chunk : chunks) {
 
             if (chunk == null || chunk.isBlank()) continue;
